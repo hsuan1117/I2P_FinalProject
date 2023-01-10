@@ -112,19 +112,18 @@ Map* create_map(const char * filepath) {
 		// [HACKATHON 0-1]
 		// use fopen to create a file FILE* type
 		// use pFile can fscanf do reading from file just like read from command line.
-		/*
+
 		game_log("%s\n", filepath);
-		pFile = fopen(...);
+		pFile = fopen(filepath, "r");
 		if (!pFile) {
 			game_abort("error to open map file\n");
 			return NULL;
 		}
-		if(fscanf(...) != 2) {
+		if(fscanf(pFile, "%d %d", &M->row_num, &M->col_num) != 2) {
 			game_abort("Map format unmatched\n");
 			return NULL;
 		}
 		getc(pFile); // get the '\n'
-		*/
 	}
 
 	/*
@@ -158,14 +157,12 @@ Map* create_map(const char * filepath) {
 			if (filepath == NULL)
 			// [HACKATHON 0-1]
 			// You can just switch to nthu_map if you want to finish HACKATHON 0 later.
-				M->map[i][j] = default_map[i][j]; 
+                M->map[i][j] = default_map[i][j];
 			//	M->map[i][j] = nthu_map[i][j];
 			else
 				// [HACKATHON 0-2]
 				// read the map from file just like read from default_map
-				/*
-				fscanf(...);
-				*/
+				fscanf(pFile, "%c", &M->map[i][j]);
 			switch(M->map[i][j]) {
 			case '#':
 				M->wallnum++;
@@ -189,13 +186,13 @@ void delete_map(Map* M) {
 		return;
 	// [TODO]
 	// you should free the dynamic allocated part of Map* M at here;
-	/*
-	if(M->map)
-	{
-		...
-		free(...)
-		...
-	*/
+
+	if(M->map) {
+        for (int i = 0; i < M->row_num; i++) {
+            if(M->map[i])
+                free(M->map[i]);
+        }
+    }
 	free(M);
 }
 
@@ -218,11 +215,9 @@ void draw_map(Map const* M) {
 					break;
 				// [ TODO ]
 				// draw the power bean
-				/*
 				case 'P':
-					draw_power_bean(...);
+					draw_power_bean(M, row, col);
 					break;
-				*/
 				case '.':
 					draw_bean(M, row, col);
 					break;
