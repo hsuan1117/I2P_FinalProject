@@ -1,4 +1,4 @@
- //#pragma once
+//#pragma once
 // [game.h]
 // declare shared variables and allegro5 related routines.
 
@@ -17,8 +17,10 @@
 #ifndef GAME_H
 #define GAME_H
 #define _CRT_SECURE_NO_DEPRECATE
+
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_font.h>	
+#include <allegro5/allegro_font.h>
+
 typedef struct Ghost Ghost;
 typedef struct Map Map;
 typedef struct Pacman Pacman;
@@ -27,27 +29,31 @@ typedef struct Pacman Pacman;
 #define LOG_ENABLED
 ; // Question
 // Types of function pointers.
-static ALLEGRO_EVENT_QUEUE* game_event_queue;
+static ALLEGRO_EVENT_QUEUE *game_event_queue;
+
 typedef void(*func_ptr)(void);
-typedef void(*script_func_ptr)(Ghost* ghost, Map*M, Pacman* pacman);
+
+typedef void(*script_func_ptr)(Ghost *ghost, Map *M, Pacman *pacman);
+
 typedef void(*func_ptr_keyboard)(int keycode);
+
 typedef void(*func_ptr_mouse)(int btn, int x, int y, int dz);
 // TODO: More function pointer typedefs for other events.
 
 // Structure containing all scene functions / event callbacks.
 typedef struct {
-	char* name;
-	func_ptr initialize;
-	func_ptr update;
-	func_ptr draw;
-	func_ptr destroy;
-	func_ptr_keyboard on_key_down;
-	func_ptr_keyboard on_key_up;
-	func_ptr_mouse on_mouse_down;
-	func_ptr_mouse on_mouse_move;
-	func_ptr_mouse on_mouse_up;
-	func_ptr_mouse on_mouse_scroll;
-	// TODO: More event callbacks such as timer tick, video finished, ...
+    char *name;
+    func_ptr initialize;
+    func_ptr update;
+    func_ptr draw;
+    func_ptr destroy;
+    func_ptr_keyboard on_key_down;
+    func_ptr_keyboard on_key_up;
+    func_ptr_mouse on_mouse_down;
+    func_ptr_mouse on_mouse_move;
+    func_ptr_mouse on_mouse_up;
+    func_ptr_mouse on_mouse_scroll;
+    // TODO: More event callbacks such as timer tick, video finished, ...
 } Scene;
 
 // Frame rate (frame per second)
@@ -68,7 +74,7 @@ extern Scene active_scene;
 extern bool key_state[ALLEGRO_KEY_MAX];
 // Mouse state, whether the key is down or not.
 // 1 is for left, 2 is for right, 3 is for middle.
-extern bool* mouse_state;
+extern bool *mouse_state;
 // Mouse position.
 extern int mouse_x, mouse_y;
 // TODO: More variables to store input states such as joysticks, ...
@@ -77,6 +83,7 @@ extern int mouse_x, mouse_y;
 
 // Create and start running the game.
 void game_create(void);
+
 // Function to change from one scene to another.
 void game_change_scene(Scene next_scene);
 
@@ -84,11 +91,12 @@ void game_change_scene(Scene next_scene);
 // Write formatted output to stdout and file from the format string.
 // If the program crashes unexpectedly, you can inspect "log.txt" for
 // further information.
-void game_abort(const char* format, ...);
+void game_abort(const char *format, ...);
+
 // Log events for later debugging, used like 'game_log'.
 // Write formatted output to stdout and file from the format string.
 // You can inspect "log.txt" for logs in the last run.
-void game_log(const char* format, ...);
+void game_log(const char *format, ...);
 
 /* Functions and variables that should be implemented in other files. */
 
@@ -96,6 +104,8 @@ void game_log(const char* format, ...);
 // Allows the game to perform any initialization it needs before
 // starting to run.
 extern void shared_init(void);
+
 // Free shared variables and resources.
 extern void shared_destroy(void);
+
 #endif
