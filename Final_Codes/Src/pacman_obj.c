@@ -24,36 +24,41 @@ extern bool game_over;
 extern float effect_volume;
 
 /* Declare static function */
-static bool pacman_movable(Pacman* pacman, Map* M, Directions targetDirec) {
+static bool pacman_movable(Pacman* pacman, Map* M, Directions targetDirection) {
 	// [HACKATHON 1-2]
 	// TODO: Determine if the current direction is movable.
 	// That is to say, your pacman shouldn't penetrate 'wall' and 'room'
 	// , where room is reserved for ghost to set up.
-	// 1) For the current direction `targetDirec`, use pre-implemented function
+	// 1) For the current direction `targetDirection`, use pre-implemented function
 	// `is_wall_block` and `is_room_block` to check if the block is wall or room. (they are both defined in map.c)
 	// 2) the coordinate data of pacman is stored in pacman->objData.Coord
 	// it is a self-defined pair IntInt type. Trace the code and utilize it.
 
-	/*
-	... pacman->objData.Coord.x, ... pacman->objData.Coord.y;
-	
-	switch (targetDirec)
+
+	int x = pacman->objData.Coord.x;
+    int y = pacman->objData.Coord.y;
+
+	switch (targetDirection)
 	{
 	case UP:
-		...
+        y--;
+        break;
 	case DOWN:
-		...
+		y++;
+        break;
 	case LEFT:
-		...
+		x--;
+        break;
 	case RIGHT:
-		...
+        x++;
+        break;
 	default:
 		// for none UP, DOWN, LEFT, RIGHT direction u should return false.
 		return false;
 	}
-	if (is_wall_block(M, ..., ...) || is_room_block(M, ..., ...))
-		return false;
-	*/
+	if (is_wall_block(M, x, y) || is_room_block(M, x, y)) {
+        return false;
+    }
 	return true;
 }
 
@@ -119,7 +124,7 @@ void pacman_draw(Pacman* pman) {
 		drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
 		draw_region, draw_region, 0
 	);
-	
+
 	int offset = 0;
 	if (game_over) {
 		/*
@@ -143,9 +148,9 @@ void pacman_move(Pacman* pacman, Map* M) {
 		return;
 
 	int probe_x = pacman->objData.Coord.x, probe_y = pacman->objData.Coord.y;
-	if (pacman_movable(pacman, M, pacman->objData.nextTryMove)) 
+	if (pacman_movable(pacman, M, pacman->objData.nextTryMove))
 		pacman->objData.preMove = pacman->objData.nextTryMove;
-	else if (!pacman_movable(pacman, M, pacman->objData.preMove)) 
+	else if (!pacman_movable(pacman, M, pacman->objData.preMove))
 		return;
 
 	switch (pacman->objData.preMove)
