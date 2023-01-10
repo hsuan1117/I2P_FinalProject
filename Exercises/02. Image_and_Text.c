@@ -6,7 +6,10 @@
 
 #include <stdio.h>
 #include <allegro5/allegro.h>
-// TODO: [Include headers]
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
 // Include the header files that enables us to
 // 1) draw primitives.
 // 2) load and draw images.
@@ -17,9 +20,10 @@
 // If defined, logs will be shown on console and written to file.
 #define LOG_ENABLED
 
-ALLEGRO_DISPLAY* game_display;
-// TODO: [Declare variables]
+ALLEGRO_DISPLAY *game_display;
 // Declare the variables that store the font and the image we need.
+ALLEGRO_FONT *font;
+ALLEGRO_BITMAP *image;
 
 // Define screen width and height as constants.
 const int SCREEN_W = 800;
@@ -35,9 +39,11 @@ const int IMG_H = 479;
 // Allows the game to perform any initialization it needs before
 // starting to run.
 void game_init(void);
+
 // Draw to display.
 // This is called when the game should draw itself.
 void game_draw(void);
+
 // Release resources.
 // Free the pointers we allocated.
 void game_destroy(void);
@@ -48,13 +54,15 @@ void game_destroy(void);
 // Write formatted output to stdout and file from the format string.
 // If the program crashes unexpectedly, you can inspect "log.txt" for
 // further information.
-void game_abort(const char* format, ...);
+void game_abort(const char *format, ...);
+
 // Log events for later debugging, used like 'printf'.
 // Write formatted output to stdout and file from the format string.
 // You can inspect "log.txt" for logs in the last run.
-void game_log(const char* format, ...);
+void game_log(const char *format, ...);
+
 // Called by 'game_abort', 'game_log' to deal with va_lists.
-void game_vlog(const char* format, va_list arg);
+void game_vlog(const char *format, va_list arg);
 
 // Program entry point.
 // Returns program exit code.
@@ -66,12 +74,15 @@ int main(void) {
     if (!game_display)
         game_abort("failed to create display");
 
-    // TODO: [Initialize add-ons]
     // 1) Initialize primitives add-on.
     // 2) Initialize font add-on.
     // 3) Initialize ttf (True Type Font) add-on.
     // 4) Initialize image add-on.
     // Don't forget to check the return value.
+    al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_image_addon();
+    al_init_ttf_addon();
 
     game_log("Allegro5 initialized");
     game_log("Game begin");
@@ -86,10 +97,11 @@ int main(void) {
 }
 
 void game_init(void) {
-    // TODO: [Load resources]
     // Load font from file: 'pirulen.ttf' with font size 12.
     // Load image from file: '32largebugs.jpg'.
     // Don't forget to check the return values.
+    font = al_load_ttf_font("pirulen.ttf", 12, 0);
+    image = al_load_bitmap("32largebugs.jpg");
 }
 
 void game_draw(void) {
@@ -112,6 +124,13 @@ void game_draw(void) {
     //         flags: ALLEGRO_ALIGN_CENTER,
     //         text: "Source: http://cartoontester.blogspot.com/2010/01/big-bugs.html".
 
+    al_draw_rectangle((SCREEN_W - 437) / 2, 24, (SCREEN_W + 437) / 2, 50, al_map_rgb(255, 255, 255), 0);
+    al_draw_text(font, al_map_rgb(255, 255, 255), SCREEN_W / 2, 30, ALLEGRO_ALIGN_CENTER,
+                 "How to deal with bugs in your final project");
+    al_draw_bitmap(image, (SCREEN_W - IMG_W) / 2, (SCREEN_H - IMG_H) / 2, 0);
+    al_draw_text(font, al_map_rgb(255, 255, 255), SCREEN_W / 2, 550, ALLEGRO_ALIGN_CENTER,
+                 "Source: http://cartoontester.blogspot.com/2010/01/big-bugs.html");
+
     al_flip_display();
 }
 
@@ -129,7 +148,7 @@ void game_destroy(void) {
 // | doesn't affect the game.                                        |
 // +=================================================================+
 
-void game_abort(const char* format, ...) {
+void game_abort(const char *format, ...) {
     va_list arg;
     va_start(arg, format);
     game_vlog(format, arg);
@@ -141,7 +160,7 @@ void game_abort(const char* format, ...) {
     exit(1);
 }
 
-void game_log(const char* format, ...) {
+void game_log(const char *format, ...) {
 #ifdef LOG_ENABLED
     va_list arg;
     va_start(arg, format);
@@ -150,13 +169,13 @@ void game_log(const char* format, ...) {
 #endif
 }
 
-void game_vlog(const char* format, va_list arg) {
+void game_vlog(const char *format, va_list arg) {
 #ifdef LOG_ENABLED
     static bool clear_file = true;
     vprintf(format, arg);
     printf("\n");
     // Write log to file for later debugging.
-    FILE* pFile = fopen("log.txt", clear_file ? "w" : "a");
+    FILE *pFile = fopen("log.txt", clear_file ? "w" : "a");
     if (pFile) {
         vfprintf(pFile, format, arg);
         fprintf(pFile, "\n");
