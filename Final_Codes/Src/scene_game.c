@@ -51,7 +51,7 @@ static void init(void) {
 	basic_map = create_map(NULL);
 	// [TODO]
 	// Create map from .txt file and design your own map !!
-	// basic_map = create_map("Assets/map_nthu.txt");
+	basic_map = create_map("Assets/map_nthu.txt");
 	if (!basic_map) {
 		game_abort("error on creating map");
 	}	
@@ -107,21 +107,19 @@ static void checkItem(void) {
 		return;
 	// [HACKATHON 1-3]
 	// TODO: check which item you are going to eat and use `pacman_eatItem` to deal with it.
-	/*
-	switch (basic_map->map...)
+
+	switch (basic_map->map[Grid_y][Grid_x])
 	{
 	case '.':
-		pacman_eatItem(...);
+		pacman_eatItem(pman, '.');
 	default:
 		break;
 	}
-	*/
+
 	// [HACKATHON 1-4]
 	// erase the item you eat from map
 	// be careful no erasing the wall block.
-	/*
-		basic_map->map...;
-	*/
+    basic_map->map[Grid_y][Grid_x] = ' ';
 }
 static void status_update(void) {
 	for (int i = 0; i < GHOST_NUM; i++) {
