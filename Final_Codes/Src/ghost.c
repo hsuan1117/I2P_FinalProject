@@ -131,7 +131,7 @@ void ghost_NextMove(Ghost* ghost, Directions next) {
 void printGhostStatus(GhostStatus S) {
 
 	switch(S){
-	
+
 	case BLOCKED: // stay inside the ghost room
 		game_log("BLOCKED");
 		break;
@@ -152,34 +152,37 @@ void printGhostStatus(GhostStatus S) {
 		break;
 	}
 }
-bool ghost_movable(Ghost* ghost, Map* M, Directions targetDirec, bool room) {
+bool ghost_movable(Ghost* ghost, Map* M, Directions targetDirection, bool room) {
 	// [HACKATHON 2-3]
 	// TODO: Determine if the current direction is movable.
 	// Basically, this is a ghost version of `pacman_movable`.
 	// So if you have finished (and you should), you can just "copy and paste"
 	// and do some small alternation.
 
-	/*
-	... ghost->objData.Coord.x, ... ghost->objData.Coord.y;
+	int x = ghost->objData.Coord.x;
+    int y = ghost->objData.Coord.y;
 
-	switch (targetDirec)
+	switch (targetDirection)
 	{
 	case UP:
-		...
+		y--;
+            break;
 	case DOWN:
-		...
+		y++;
+            break;
 	case LEFT:
-		...
+		x--;
+            break;
 	case RIGHT:
-		...
+		x++;
+            break;
 	default:
 		// for none UP, DOWN, LEFT, RIGHT direction u should return false.
 		return false;
 	}
 
-	if (is_wall_block(M, ..., ...) || (room && is_room_block(M, ..., ...)))
+	if (is_wall_block(M, x, y) || (room && is_room_block(M, x, y)))
 		return false;
-	*/
 
 	return true;
 
@@ -225,7 +228,7 @@ void ghost_move_script_GO_OUT(Ghost* ghost, Map* M) {
 	// Here we always assume the room of ghosts opens upward.
 	// And used a greedy method to drag ghosts out of room.
 	// You should modify here if you have different implementation/design of room.
-	if(M->map[ghost->objData.Coord.y][ghost->objData.Coord.x] == 'B') 
+	if(M->map[ghost->objData.Coord.y][ghost->objData.Coord.x] == 'B')
 		ghost_NextMove(ghost, UP);
 	else
 		ghost->status = FREEDOM;
