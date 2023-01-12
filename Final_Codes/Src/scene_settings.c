@@ -3,6 +3,7 @@
 // No need to do anything for this part. We've already done it for
 // you, so this 2 files is like the default scene template.
 #include "scene_settings.h"
+#include "shared.h"
 
 // Variables and functions with 'static' prefix at the top level of a
 // source file is only accessible in that file ("file scope", also
@@ -16,6 +17,7 @@
 
 static void draw(void) {
     al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_text(jfFont, al_map_rgb(255, 255, 255), 400, 10, ALLEGRO_ALIGN_CENTER, "設定");
 }
 
 // The only function that is shared across files.
