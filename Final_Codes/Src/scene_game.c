@@ -85,7 +85,7 @@ static void init(void) {
         // Try to look the definition of ghost_create and figure out what should be placed here.
         for (int i = 0; i < GHOST_NUM; i++) {
             game_log("creating ghost %d\n", i);
-            ghosts[i] = ghost_create(i);
+            ghosts[i] = ghost_create(Blinky);
             if (!ghosts[i])
                 game_abort("error creating ghost\n");
         }
@@ -119,7 +119,6 @@ static void checkItem(void) {
     switch (basic_map->map[Grid_y][Grid_x]) {
         case '.':
             pacman_eatItem(pman, '.');
-        default:
             break;
     }
 
@@ -140,16 +139,14 @@ static void status_update(void) {
         // [NOTE]
         // You should have some branch here if you want to implement power bean mode.
         // Uncomment Following Code
-        /*
-        if(!cheat_mode and collision of pacman and ghost)
-        {
+
+        if(!cheat_mode && RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))){
             game_log("collide with ghost\n");
             al_rest(1.0);
             pacman_die();
             game_over = true;
             break;
         }
-        */
     }
 }
 
