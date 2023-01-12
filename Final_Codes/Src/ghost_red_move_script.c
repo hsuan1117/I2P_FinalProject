@@ -46,9 +46,24 @@ static void ghost_red_move_script_FREEDOM(Ghost *ghost, Map *M) {
             }
         }
     }
-
-    ghost_NextMove(ghost, proba[generateRandomNumber(0, cnt - 1)]);
-
+    if(cnt != 0)
+        ghost_NextMove(ghost, proba[generateRandomNumber(0, cnt - 1)]);
+    else {
+        switch (ghost->objData.facing) {
+            case LEFT:
+                ghost_NextMove(ghost, RIGHT);
+                break;
+            case RIGHT:
+                ghost_NextMove(ghost, LEFT);
+                break;
+            case UP:
+                ghost_NextMove(ghost, DOWN);
+                break;
+            case DOWN:
+                ghost_NextMove(ghost, UP);
+                break;
+        }
+    }
     // [TODO] (Not in Hackathon)
     // Description:
     // For red(Blinky) ghost, we ask you to implement an random strategy ghost,
