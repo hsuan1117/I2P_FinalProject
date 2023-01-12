@@ -120,6 +120,7 @@ static void checkItem(void) {
     switch (basic_map->map[Grid_y][Grid_x]) {
         case '.':
             pacman_eatItem(pman, '.');
+            game_main_Score++;
             break;
     }
 
@@ -141,7 +142,8 @@ static void status_update(void) {
         // You should have some branch here if you want to implement power bean mode.
         // Uncomment Following Code
 
-        if(!cheat_mode && RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))){
+        if (!cheat_mode &&
+            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
             game_log("collide with ghost\n");
             al_rest(1.0);
             pacman_die();
@@ -177,9 +179,7 @@ static void draw(void) {
 
     //	[TODO]
     //	Draw scoreboard, something your may need is sprinf();
-    /*
-        al_draw_text(...);
-    */
+    al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 10, 10, ALLEGRO_ALIGN_LEFT, "Score: %d", game_main_Score);
 
     draw_map(basic_map);
 
