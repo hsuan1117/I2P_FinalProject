@@ -20,9 +20,32 @@ static void ghost_red_move_script_FREEDOM(Ghost *ghost, Map *M) {
 
     static Directions proba[4]; // possible movement
     int cnt = 0;
-    for (Directions i = 1; i <= 4; i++)
-        if (ghost_movable(ghost, M, i, false))
-            proba[cnt++] = i;
+    for (Directions i = 1; i <= 4; i++) {
+        if (ghost_movable(ghost, M, i, false)) {
+            switch (ghost->objData.facing) {
+                case LEFT:
+                    if (i != RIGHT) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case RIGHT:
+                    if (i != LEFT) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case UP:
+                    if (i != DOWN) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case DOWN:
+                    if (i != UP) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+            }
+        }
+    }
 
     ghost_NextMove(ghost, proba[generateRandomNumber(0, cnt - 1)]);
 
