@@ -6,6 +6,7 @@
 #include "utility.h"
 #include "scene_game.h"
 #include "scene_menu.h"
+#include "scene_game_over.h"
 #include "pacman_obj.h"
 #include "ghost.h"
 #include "map.h"
@@ -156,8 +157,8 @@ static void update(void) {
         /*
             [TODO]
             start pman->death_anim_counter and schedule a game-over event (e.g change scene to menu) after Pacman's death animation finished
-            game_change_scene(...);
         */
+        game_change_scene(scene_game_over_create());
         return;
     }
 
