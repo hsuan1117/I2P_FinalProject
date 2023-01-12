@@ -98,8 +98,8 @@ static void on_mouse_move(int a, int mouse_x, int mouse_y, int f) {
 //	Uncomment and fill the code below
 
 static void on_mouse_down() {
-	if (btnSettings.hovered)
-		game_change_scene(scene_settings_create());
+    if (btnSettings.hovered)
+        game_change_scene(scene_settings_create());
 }
 
 
@@ -109,6 +109,8 @@ static void destroy() {
     //	[HACKATHON 3-10]
     //	TODO: Destroy button images
     //	Uncomment and fill the code below
+    al_destroy_bitmap(btnSettings.hovered_img);
+    al_destroy_bitmap(btnSettings.default_img);
 }
 
 static void on_key_down(int keycode) {
