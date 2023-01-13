@@ -20,6 +20,7 @@ extern ALLEGRO_SAMPLE *PACMAN_DEATH_SOUND;
 extern ALLEGRO_FONT *menuFont;
 extern ALLEGRO_FONT *sansFont;
 extern ALLEGRO_FONT *jfFont;
+extern ALLEGRO_FONT *faFont;
 extern int fontSize;
 extern float music_volume;
 extern float effect_volume;
@@ -32,5 +33,9 @@ void shared_init(void);
 
 // Free shared variables and resources.
 void shared_destroy(void);
+
+void set_volume_effect(int volume, int effect);
+int load_volume();
+int load_effect();
 
 #endif

@@ -10,6 +10,7 @@ pkg_check_modules(ALLEGRO5 REQUIRED allegro-5 allegro_main-5 allegro_font-5 alle
 include_directories(Src)
 
 file(COPY Assets/Music DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY Assets/ProgressBar DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(Allegro5Template

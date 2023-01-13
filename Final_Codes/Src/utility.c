@@ -2,6 +2,7 @@
 // you should implement the utility functions defined in the header.
 
 #include "utility.h"
+#include "shared.h"
 #include "game.h"
 #include <math.h>
 #include <stdlib.h>
@@ -28,14 +29,16 @@ ALLEGRO_SAMPLE *load_audio(const char *filename) {
 
 ALLEGRO_SAMPLE_ID play_audio(ALLEGRO_SAMPLE *sample, float volume) {
     ALLEGRO_SAMPLE_ID id;
-    if (!al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &id))
+    float vol = load_effect() / 10.0;
+    if (!al_play_sample(sample, volume * vol, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, &id))
         game_abort("failed to play audio (once)");
     return id;
 }
 
 ALLEGRO_SAMPLE_ID play_bgm(ALLEGRO_SAMPLE *sample, float volume) {
     ALLEGRO_SAMPLE_ID id;
-    if (!al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &id))
+    float vol = load_volume() / 10.0;
+    if (!al_play_sample(sample, volume * vol, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &id))
         game_abort("failed to play audio (bgm)");
 
     //game_log("played audio (bgm)");
