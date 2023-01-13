@@ -122,6 +122,16 @@ static void checkItem(void) {
             pacman_eatItem(pman, '.');
             game_main_Score++;
             break;
+        case 'P':
+            pacman_eatItem(pman, 'P');
+            game_main_Score += 10;
+            pman->powerUp = true;
+            for(int i = 0; i < GHOST_NUM; i++){
+                printf("ghost %d is %d\n", i, ghosts[i]->status);
+                ghost_toggle_FLEE(ghosts[i], true);
+            }
+            al_start_timer(power_up_timer);
+            break;
     }
 
     // [HACKATHON 1-4]
@@ -141,9 +151,17 @@ static void status_update(void) {
         // [NOTE]
         // You should have some branch here if you want to implement power bean mode.
         // Uncomment Following Code
+        if (!cheat_mode &&
+            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD)) &&
+            ghosts[i]->status == FLEE) {
+            ghosts[i]->status = GO_IN;
+            //ghosts[i]->speed = 10;
+            game_main_Score+=10;
+        }
 
         if (!cheat_mode &&
-            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
+            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD)) &&
+            ghosts[i]->status != FLEE) {
             game_log("collide with ghost\n");
             al_start_timer(pman->death_anim_counter);
             game_over = true;
@@ -164,6 +182,17 @@ static void update(void) {
             game_change_scene(scene_game_over_create(game_main_Score));
     }
 
+    if (al_get_timer_started(power_up_timer)) {
+        if (al_get_timer_count(power_up_timer) >= 10) {
+            al_stop_timer(power_up_timer);
+            al_set_timer_count(power_up_timer, 0);
+            pman->powerUp = false;
+            for(int i = 0; i < GHOST_NUM; i++){
+                ghost_toggle_FLEE(ghosts[i], false);
+            }
+        }
+    }
+
     step();
     checkItem();
     status_update();
@@ -179,7 +208,13 @@ static void draw(void) {
 
     //	[TODO]
     //	Draw scoreboard, something your may need is sprinf();
-    al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 10, 10, ALLEGRO_ALIGN_LEFT, "Score: %d", game_main_Score);
+    al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 20, ALLEGRO_ALIGN_LEFT, "Score: %d", game_main_Score);
+    al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 700, ALLEGRO_ALIGN_LEFT, "PowerMode: %s",
+                  pman->powerUp ? "ON" : "OFF");
+    if (pman->powerUp) {
+        al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 735, ALLEGRO_ALIGN_LEFT, "PowerMode Last: %lld s",
+                      10ll - al_get_timer_count(power_up_timer));
+    }
 
     draw_map(basic_map);
 
@@ -263,6 +298,9 @@ static void on_key_down(int key_code) {
             break;
         case ALLEGRO_KEY_G:
             debug_mode = !debug_mode;
+            break;
+        case ALLEGRO_KEY_ESCAPE:
+            game_change_scene(scene_menu_create());
             break;
         default:
             break;

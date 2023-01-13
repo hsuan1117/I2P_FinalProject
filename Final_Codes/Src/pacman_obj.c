@@ -117,7 +117,7 @@ void pacman_draw(Pacman *pman) {
     RecArea drawArea = getDrawArea(pman->objData, GAME_TICK_CD);
 
     long long offset = 0;
-    printf("I am called\n");
+    //printf("I am called\n");
     if (game_over) {
         /*
             hint: instead of using pman->objData.moveCD, use Pacman's death_anim_counter to create animation
@@ -194,6 +194,10 @@ void pacman_move(Pacman *pacman, Map *M) {
 void pacman_eatItem(Pacman *pacman, const char Item) {
     switch (Item) {
         case '.':
+            stop_bgm(PACMAN_MOVESOUND_ID);
+            PACMAN_MOVESOUND_ID = play_audio(PACMAN_MOVESOUND, effect_volume);
+            break;
+        case 'P':
             stop_bgm(PACMAN_MOVESOUND_ID);
             PACMAN_MOVESOUND_ID = play_audio(PACMAN_MOVESOUND, effect_volume);
             break;

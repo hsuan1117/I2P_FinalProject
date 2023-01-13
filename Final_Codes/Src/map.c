@@ -218,8 +218,6 @@ void draw_map(Map const *M) {
                 case '#':
                     draw_block_index(M, row, col);
                     break;
-                    // [ TODO ]
-                    // draw the power bean
                 case 'P':
                     draw_power_bean(M, row, col);
                     break;

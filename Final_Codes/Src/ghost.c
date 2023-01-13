@@ -3,6 +3,7 @@
 #include "ghost.h"
 #include "map.h"
 #include "pacman_obj.h"
+#include "utility.h"
 
 /* global variables*/
 // [ NOTE ]
@@ -62,47 +63,27 @@ Ghost *ghost_create(int flag) {
     return ghost;
 }
 
-void ghost_destory(Ghost *ghost) {
-    /*
-        [TODO]
-        free ghost resource
+void ghost_destroy(Ghost *ghost) {
+    // free ghost resource
 
-        al_destory_bitmap(...);
-        ...
-        free(ghost);
-    */
+    al_destroy_bitmap(ghost->move_sprite);
+    al_destroy_bitmap(ghost->flee_sprite);
+    al_destroy_bitmap(ghost->dead_sprite);
+
+    free(ghost);
 }
 
 void ghost_draw(Ghost *ghost) {
     // getDrawArea return the drawing RecArea defined by objData and GAME_TICK_CD
     RecArea drawArea = getDrawArea(ghost->objData, GAME_TICK_CD);
 
-    //Draw default image
-
-
-    /*
-        [TODO]
-        Draw ghost according to its status
-        hint : use ghost->objData.moveCD value to determine which frame of the animation to draw.
-
-            A not so good way is:
-
-            if(ghost->objData.moveCD % 16 == 0){
-                al_draw_scaled_bitmap(...);
-            }
-            else if(ghost->objData.moveCD % 16 == 1){
-                al_draw_scaled_bitmap(...);
-            }...
-
-            since modulo operation is expensive, better avoid using it.
-    */
-
     int bitmap_x_offset = 0;
     // [TODO] below is for animation usage, change the sprite you want to use.
     if (ghost->status == FLEE) {
-        /*
-            al_draw_scaled_bitmap(...)
-        */
+        al_draw_scaled_bitmap(ghost->flee_sprite, 0, 0, 30, 30,
+                              drawArea.x + fix_draw_pixel_offset_x,
+                              drawArea.y + fix_draw_pixel_offset_y,
+                              drawArea.w, drawArea.h, 0);
     } else if (ghost->status == GO_IN) {
         /*
         switch (ghost->objData.facing)
@@ -113,26 +94,26 @@ void ghost_draw(Ghost *ghost) {
     } else {
         switch (ghost->objData.facing) {
             case RIGHT:
-                bitmap_x_offset = 0 + 16 * ((ghost->objData.moveCD/2) % 2);
+                bitmap_x_offset = 0 + 16 * ((ghost->objData.moveCD / 2) % 2);
                 break;
             case LEFT:
-                bitmap_x_offset = 32 + 16 * ((ghost->objData.moveCD/2) % 2);
+                bitmap_x_offset = 32 + 16 * ((ghost->objData.moveCD / 2) % 2);
                 break;
             case UP:
-                bitmap_x_offset = 64 + 16 * ((ghost->objData.moveCD/2) % 2);
+                bitmap_x_offset = 64 + 16 * ((ghost->objData.moveCD / 2) % 2);
                 break;
             case DOWN:
-                bitmap_x_offset = 96 + 16 * ((ghost->objData.moveCD/2) % 2);
+                bitmap_x_offset = 96 + 16 * ((ghost->objData.moveCD / 2) % 2);
                 break;
             default:
                 break;
         }
+        al_draw_scaled_bitmap(ghost->move_sprite, bitmap_x_offset, 0,
+                              16, 16,
+                              drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+                              draw_region, draw_region, 0
+        );
     }
-    al_draw_scaled_bitmap(ghost->move_sprite, bitmap_x_offset, 0,
-                           16, 16,
-                           drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-                           draw_region, draw_region, 0
-    );
 
 }
 
@@ -208,17 +189,15 @@ void ghost_toggle_FLEE(Ghost *ghost, bool setFLEE) {
     // For those who are not (BLOCK, GO_IN, etc.), they won't change state."
     // This implementation is based on the classic PACMAN game.
     // You are allowed to do your own implementation of power bean system.
-    /*
-        if(setFLEE){
-            if(... == FREEDOM){
-                ... = FLEE;
-                ... speed = ...
-            }
-        }else{
-            if(... == FLEE)
-                ..
+    if (setFLEE) {
+        if (ghost->status == FREEDOM) {
+            ghost->status = FLEE;
+            ghost->speed = basic_speed * 2;
         }
-    */
+    } else {
+        if (ghost->status == FLEE)
+            ghost->status = FREEDOM;
+    }
 }
 
 void ghost_collided(Ghost *ghost) {
@@ -257,6 +236,39 @@ void ghost_move_script_FLEE(Ghost *ghost, Map *M, const Pacman *const pacman) {
     // To achieve this, think in this way. We first get the direction to shortest path to pacman, call it K (K is either UP, DOWN, RIGHT or LEFT).
     // Then we choose other available direction rather than direction K.
     // In this way, ghost will escape from pacman.
-
+    static Directions proba[4]; // possible movement
+    int cnt = 0;
+    for (Directions i = 1; i <= 4; i++) {
+        if(i==shortestDirection)continue;
+        if (ghost_movable(ghost, M, i, false)) {
+            switch (ghost->objData.facing) {
+                case LEFT:
+                    if (i != RIGHT) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case RIGHT:
+                    if (i != LEFT) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case UP:
+                    if (i != DOWN) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+                case DOWN:
+                    if (i != UP) {
+                        proba[cnt++] = i;
+                    }
+                    break;
+            }
+        }
+    }
+    if(cnt != 0)
+        ghost_NextMove(ghost, proba[generateRandomNumber(0, cnt - 1)]);
+    else {
+        ghost_NextMove(ghost, shortestDirection);
+    }
 }
 
