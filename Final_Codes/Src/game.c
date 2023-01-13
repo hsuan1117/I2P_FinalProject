@@ -16,6 +16,7 @@
 #include "game.h"
 #include "scene_game.h"
 #include "scene_menu.h"
+#include "TextInput.h"
 
 /* global variables*/
 const int FPS = 60;
@@ -220,8 +221,7 @@ static void game_start_event_loop(void) {
                     (*active_scene.on_mouse_scroll)(0, event.mouse.x, event.mouse.y, event.mouse.dz);
             }
         }
-        // TODO: Process more events and call callbacks by adding more
-        // entries inside Scene.
+        // TODO: Process more events and call callbacks by adding more entries inside Scene.
 
         // Redraw
         if (redraws > 0 && al_is_event_queue_empty(game_event_queue)) {
