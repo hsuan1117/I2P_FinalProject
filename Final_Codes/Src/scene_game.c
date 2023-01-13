@@ -14,7 +14,7 @@
 
 // [HACKATHON 2-0]
 // Just modify the GHOST_NUM to 1
-#define GHOST_NUM 1
+#define GHOST_NUM 3
 /* global variables*/
 extern const uint32_t GAME_TICK_CD;
 extern uint32_t GAME_TICK;
@@ -84,9 +84,9 @@ static void init(void) {
         // [HACKATHON 2-2]
         // TODO: create a ghost.
         // Try to look the definition of ghost_create and figure out what should be placed here.
-        for (int i = 0; i < GHOST_NUM; i++) {
+        for (GhostType i = 0; i < GHOST_NUM; i++) {
             game_log("creating ghost %d\n", i);
-            ghosts[i] = ghost_create(Blinky);
+            ghosts[i] = ghost_create(i);
             if (!ghosts[i])
                 game_abort("error creating ghost\n");
         }
