@@ -160,7 +160,7 @@ static void update(void) {
             [TODO]
             start pman->death_anim_counter and schedule a game-over event (e.g change scene to menu) after Pacman's death animation finished
         */
-        game_change_scene(scene_game_over_create());
+        game_change_scene(scene_game_over_create(game_main_Score));
         return;
     }
 

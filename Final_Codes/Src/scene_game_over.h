@@ -3,6 +3,6 @@
 
 #include "game.h"
 
-Scene scene_game_over_create(void);
+Scene scene_game_over_create(int score);
 
 #endif
