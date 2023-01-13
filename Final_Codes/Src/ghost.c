@@ -192,11 +192,13 @@ void ghost_toggle_FLEE(Ghost *ghost, bool setFLEE) {
     if (setFLEE) {
         if (ghost->status == FREEDOM) {
             ghost->status = FLEE;
-            ghost->speed = basic_speed * 2;
+            ghost->speed = basic_speed * 0.5;
         }
     } else {
-        if (ghost->status == FLEE)
+        if (ghost->status == FLEE) {
             ghost->status = FREEDOM;
+            ghost->speed = basic_speed;
+        }
     }
 }
 
@@ -239,7 +241,7 @@ void ghost_move_script_FLEE(Ghost *ghost, Map *M, const Pacman *const pacman) {
     static Directions proba[4]; // possible movement
     int cnt = 0;
     for (Directions i = 1; i <= 4; i++) {
-        if(i==shortestDirection)continue;
+        if (i == shortestDirection)continue;
         if (ghost_movable(ghost, M, i, false)) {
             switch (ghost->objData.facing) {
                 case LEFT:
@@ -265,7 +267,7 @@ void ghost_move_script_FLEE(Ghost *ghost, Map *M, const Pacman *const pacman) {
             }
         }
     }
-    if(cnt != 0)
+    if (cnt != 0)
         ghost_NextMove(ghost, proba[generateRandomNumber(0, cnt - 1)]);
     else {
         ghost_NextMove(ghost, shortestDirection);

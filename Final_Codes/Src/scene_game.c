@@ -126,7 +126,7 @@ static void checkItem(void) {
             pacman_eatItem(pman, 'P');
             game_main_Score += 10;
             pman->powerUp = true;
-            for(int i = 0; i < GHOST_NUM; i++){
+            for (int i = 0; i < GHOST_NUM; i++) {
                 printf("ghost %d is %d\n", i, ghosts[i]->status);
                 ghost_toggle_FLEE(ghosts[i], true);
             }
@@ -151,22 +151,20 @@ static void status_update(void) {
         // [NOTE]
         // You should have some branch here if you want to implement power bean mode.
         // Uncomment Following Code
+        // printGhostStatus(ghosts[i]->status);
         if (!cheat_mode &&
-            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD)) &&
-            ghosts[i]->status == FLEE) {
-            ghosts[i]->status = GO_IN;
-            //ghosts[i]->speed = 10;
-            game_main_Score+=10;
-        }
-
-        if (!cheat_mode &&
-            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD)) &&
-            ghosts[i]->status != FLEE) {
-            game_log("collide with ghost\n");
-            al_start_timer(pman->death_anim_counter);
-            game_over = true;
-            pacman_die();
-            break;
+            RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
+            if (ghosts[i]->status == FLEE) {
+                // game_log("ghost %d is eaten\n", i);
+                ghosts[i]->status = GO_IN;
+                game_main_Score += 100;
+            } else {
+                game_over = true;
+                al_start_timer(pman->death_anim_counter);
+                game_over = true;
+                pacman_die();
+                break;
+            }
         }
     }
 }
@@ -183,11 +181,11 @@ static void update(void) {
     }
 
     if (al_get_timer_started(power_up_timer)) {
-        if (al_get_timer_count(power_up_timer) >= 10) {
+        if (al_get_timer_count(power_up_timer) >= power_up_duration) {
             al_stop_timer(power_up_timer);
             al_set_timer_count(power_up_timer, 0);
             pman->powerUp = false;
-            for(int i = 0; i < GHOST_NUM; i++){
+            for (int i = 0; i < GHOST_NUM; i++) {
                 ghost_toggle_FLEE(ghosts[i], false);
             }
         }
