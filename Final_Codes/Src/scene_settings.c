@@ -28,13 +28,14 @@ static void draw(void) {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     al_draw_text(jfFont, al_map_rgb(255, 255, 255), 400, 10, ALLEGRO_ALIGN_CENTER, "設定");
     al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft, 70, ALLEGRO_ALIGN_LEFT, "背景音量");
-    al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft + 250, 70, ALLEGRO_ALIGN_LEFT, "－");
+    al_draw_text(faFont, al_map_rgb(255, 255, 255), marginLeft + 250, 70, ALLEGRO_ALIGN_LEFT, "\uF027");
     //al_draw_textf(jfFont, al_map_rgb(255, 255, 255), marginLeft + 510, 70, ALLEGRO_ALIGN_LEFT, "%d", volume);
-    al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft + 470, 70, ALLEGRO_ALIGN_LEFT, "＋");
+    al_draw_text(faFont, al_map_rgb(255, 255, 255), marginLeft + 470, 70, ALLEGRO_ALIGN_LEFT, "\uF028");
     al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft, 110, ALLEGRO_ALIGN_LEFT, "音效音量");
-    al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft + 250, 110, ALLEGRO_ALIGN_LEFT, "－");
+    //al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft + 250, 110, ALLEGRO_ALIGN_LEFT, "－");
+    al_draw_text(faFont, al_map_rgb(255, 255, 255), marginLeft + 250, 110, ALLEGRO_ALIGN_LEFT, "\uF027");
     // al_draw_textf(jfFont, al_map_rgb(255, 255, 255), marginLeft + 300, 110, ALLEGRO_ALIGN_LEFT, "%d", effect);
-    al_draw_text(jfFont, al_map_rgb(255, 255, 255), marginLeft + 470, 110, ALLEGRO_ALIGN_LEFT, "＋");
+    al_draw_text(faFont, al_map_rgb(255, 255, 255), marginLeft + 470, 110, ALLEGRO_ALIGN_LEFT, "\uF028");
 
     al_draw_scaled_bitmap(
             volume_bar[volume],
@@ -54,7 +55,7 @@ static void draw(void) {
     );
 
     al_draw_text(jfFont, al_map_rgb(255, 255, 255), 400, 700, ALLEGRO_ALIGN_CENTER,
-                 "Press \"Left Arrow\" to save and back to menu");
+                 "Press \"Left Arrow or Enter\" to save and back to menu");
 }
 
 static void on_mouse_down(ALLEGRO_MOUSE_EVENT button, int x, int y) {
@@ -78,7 +79,7 @@ static void on_mouse_down(ALLEGRO_MOUSE_EVENT button, int x, int y) {
 }
 
 static void on_key_down(int key) {
-    if (key == ALLEGRO_KEY_LEFT) {
+    if (key == ALLEGRO_KEY_LEFT || key == ALLEGRO_KEY_ENTER) {
         set_volume_effect(volume, effect);
         game_change_scene(scene_menu_create());
     }

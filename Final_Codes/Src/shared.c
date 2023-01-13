@@ -31,7 +31,7 @@ void shared_init(void) {
     menuFont = load_font("Assets/Minecraft.ttf", fontSize);
     sansFont = load_font("Assets/NotoSansTC-Regular.ttf", fontSize);
     jfFont = load_font("Assets/jf.ttf", fontSize);
-    faFont = load_font("Assets/fa.ttf", fontSize);
+    faFont = load_font("Assets/fa5.otf", fontSize);
     themeMusic = load_audio("Assets/Music/original_theme.ogg");
     PACMAN_MOVESOUND = load_audio("Assets/Music/pacman-chomp.ogg");
     PACMAN_DEATH_SOUND = load_audio("Assets/Music/pacman_death.ogg");
@@ -49,7 +49,7 @@ void shared_destroy(void) {
 }
 
 void set_volume_effect(int volume, int effect) {
-    FILE *fstream = fopen("volume.txt", "r+");
+    FILE *fstream = fopen("volume.txt", "w+");
     fprintf(fstream, "%d %d", volume, effect);
     fclose(fstream);
 }
