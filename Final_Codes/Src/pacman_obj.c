@@ -137,16 +137,16 @@ void pacman_draw(Pacman *pman) {
     } else {
         switch (pman->objData.facing) {
             case RIGHT:
-                offset = 0 + 16 * ((pman->objData.moveCD/2) % 2);
+                offset = 0 + 16 * ((pman->objData.moveCD / 2) % 2);
                 break;
             case LEFT:
-                offset = 32 + 16 * ((pman->objData.moveCD/2) % 2);
+                offset = 32 + 16 * ((pman->objData.moveCD / 2) % 2);
                 break;
             case UP:
-                offset = 64 + 16 * ((pman->objData.moveCD/2) % 2);
+                offset = 64 + 16 * ((pman->objData.moveCD / 2) % 2);
                 break;
             case DOWN:
-                offset = 96 + 16 * ((pman->objData.moveCD/2) % 2);
+                offset = 96 + 16 * ((pman->objData.moveCD / 2) % 2);
                 break;
             default:
                 break;
@@ -154,9 +154,8 @@ void pacman_draw(Pacman *pman) {
     }
     al_draw_scaled_bitmap(pman->move_sprite, offset, 0,
                           16, 16,
-                          drawArea.x + fix_draw_pixel_offset_x , drawArea.y + fix_draw_pixel_offset_y,
-                          30,30,
-                          /*draw_region, draw_region,*/ 0
+                          drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+                          draw_region, draw_region, 0
     );
 }
 
