@@ -39,6 +39,7 @@ typedef struct Ghost {
     int64_t previous_timer_val;
     GhostType typeFlag;
     GhostStatus status;
+    bool expiring;
     ALLEGRO_BITMAP *move_sprite;
     ALLEGRO_BITMAP *flee_sprite;
     ALLEGRO_BITMAP *dead_sprite;

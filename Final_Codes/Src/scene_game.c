@@ -181,12 +181,18 @@ static void update(void) {
     }
 
     if (al_get_timer_started(power_up_timer)) {
+        if (al_get_timer_count(power_up_timer) >= power_up_duration - 1) {
+            for (int i = 0; i < GHOST_NUM; i++) {
+                ghosts[i]->expiring = true;
+            }
+        }
         if (al_get_timer_count(power_up_timer) >= power_up_duration) {
             al_stop_timer(power_up_timer);
             al_set_timer_count(power_up_timer, 0);
             pman->powerUp = false;
             for (int i = 0; i < GHOST_NUM; i++) {
                 ghost_toggle_FLEE(ghosts[i], false);
+                ghosts[i]->expiring = false;
             }
         }
     }

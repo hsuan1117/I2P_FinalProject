@@ -35,6 +35,8 @@ Ghost *ghost_create(int flag) {
     if (!ghost)
         return NULL;
 
+    ghost->expiring = false;
+
     ghost->typeFlag = flag;
     ghost->objData.Size.x = block_width;
     ghost->objData.Size.y = block_height;
@@ -98,10 +100,10 @@ void ghost_draw(Ghost *ghost) {
     int bitmap_x_offset = 0;
     // [TODO] below is for animation usage, change the sprite you want to use.
     if (ghost->status == FLEE) {
-        bitmap_x_offset = (((GAME_TICK >> 4) % 2)  << 4);
-
-        //if expiring
-        // bitmap_x_offset = ((GAME_TICK) >> 4) << 4;
+        if(ghost->expiring)
+            bitmap_x_offset = ((GAME_TICK) >> 4) << 4;
+        else
+            bitmap_x_offset = (((GAME_TICK >> 4) % 2)  << 4);
 
         al_draw_scaled_bitmap(ghost->flee_sprite, bitmap_x_offset, 0, 16, 16,
                               drawArea.x + fix_draw_pixel_offset_x,
