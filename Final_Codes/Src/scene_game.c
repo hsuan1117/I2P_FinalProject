@@ -20,6 +20,7 @@ extern const uint32_t GAME_TICK_CD;
 extern uint32_t GAME_TICK;
 extern ALLEGRO_TIMER *game_tick_timer;
 int game_main_Score = 0;
+int game_all_beans = 0;
 bool game_over = false;
 
 /* Internal variables*/
@@ -121,6 +122,7 @@ static void checkItem(void) {
         case '.':
             pacman_eatItem(pman, '.');
             game_main_Score++;
+            game_all_beans++;
             break;
         case 'P':
             pacman_eatItem(pman, 'P');
@@ -216,9 +218,11 @@ static void draw(void) {
     al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 700, ALLEGRO_ALIGN_LEFT, "PowerMode: %s",
                   pman->powerUp ? "ON" : "OFF");
     if (pman->powerUp) {
-        al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 735, ALLEGRO_ALIGN_LEFT, "PowerMode Last: %lld s",
+        al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 320, 700, ALLEGRO_ALIGN_LEFT, "%lld s",
                       10ll - al_get_timer_count(power_up_timer));
     }
+    al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 750, ALLEGRO_ALIGN_LEFT, "Progress: %d/%d %.0f%%",
+                  game_all_beans, basic_map->beansCount, (float)game_all_beans/(float)basic_map->beansCount*100.0);
 
     draw_map(basic_map);
 
