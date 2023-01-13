@@ -116,24 +116,19 @@ void pacman_draw(Pacman *pman) {
     */
     RecArea drawArea = getDrawArea(pman->objData, GAME_TICK_CD);
 
-    int offset = 0;
+    long long offset = 0;
+    printf("I am called\n");
     if (game_over) {
         /*
             hint: instead of using pman->objData.moveCD, use Pacman's death_anim_counter to create animation
         */
-        printf("dieeeee\n");
-        if (pman->death_anim_counter) {
-            offset = al_get_timer_count(pman->death_anim_counter) * 16;
-            printf("offset %d", offset);
-            if (offset >= 16 * 8) {
-                /*al_draw_scaled_bitmap(pman->move_sprite, 0, 0,
-                                      16, 16,
-                                      drawArea.x + fix_draw_pixel_offset_x + offset,
-                                      drawArea.y + fix_draw_pixel_offset_y + offset,
-                                      draw_region, draw_region, 0
-                );*/
-            }
-        }
+        offset = al_get_timer_count(pman->death_anim_counter);
+        al_draw_scaled_bitmap(pman->die_sprite, (offset / 16) * 16, 0,
+                              16, 16,
+                              drawArea.x + fix_draw_pixel_offset_x,
+                              drawArea.y + fix_draw_pixel_offset_y,
+                              draw_region, draw_region, 0
+        );
     } else {
         switch (pman->objData.facing) {
             case RIGHT:
@@ -151,12 +146,13 @@ void pacman_draw(Pacman *pman) {
             default:
                 break;
         }
+        al_draw_scaled_bitmap(pman->move_sprite, offset, 0,
+                              16, 16,
+                              drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+                              draw_region, draw_region, 0
+        );
     }
-    al_draw_scaled_bitmap(pman->move_sprite, offset, 0,
-                          16, 16,
-                          drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-                          draw_region, draw_region, 0
-    );
+
 }
 
 void pacman_move(Pacman *pacman, Map *M) {
@@ -211,7 +207,6 @@ void pacman_NextMove(Pacman *pacman, Directions next) {
 }
 
 void pacman_die() {
-    game_over = true;
     stop_bgm(PACMAN_MOVESOUND_ID);
     PACMAN_MOVESOUND_ID = play_audio(PACMAN_DEATH_SOUND, effect_volume);
 }

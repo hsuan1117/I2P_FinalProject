@@ -145,7 +145,7 @@ static void status_update(void) {
         if (!cheat_mode &&
             RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
             game_log("collide with ghost\n");
-            al_rest(1.0);
+            al_start_timer(pman->death_anim_counter);
             game_over = true;
             pacman_die();
             break;
@@ -160,8 +160,8 @@ static void update(void) {
             [TODO]
             start pman->death_anim_counter and schedule a game-over event (e.g change scene to menu) after Pacman's death animation finished
         */
-        game_change_scene(scene_game_over_create(game_main_Score));
-        return;
+        if (al_get_timer_count(pman->death_anim_counter) == 200)
+            game_change_scene(scene_game_over_create(game_main_Score));
     }
 
     step();
