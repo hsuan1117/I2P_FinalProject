@@ -116,10 +116,6 @@ void pacman_draw(Pacman *pman) {
     */
     RecArea drawArea = getDrawArea(pman->objData, GAME_TICK_CD);
 
-    //Draw default image
-    printf("debug: %f %f %f %f %d %lld %d\n", drawArea.x, drawArea.y, drawArea.w, drawArea.h, game_over,
-           al_get_timer_count(pman->death_anim_counter), pman->objData.moveCD);
-
     int offset = 0;
     if (game_over) {
         /*

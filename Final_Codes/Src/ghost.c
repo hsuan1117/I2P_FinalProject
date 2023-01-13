@@ -78,11 +78,7 @@ void ghost_draw(Ghost *ghost) {
     RecArea drawArea = getDrawArea(ghost->objData, GAME_TICK_CD);
 
     //Draw default image
-    al_draw_scaled_bitmap(ghost->move_sprite, 0, 0,
-                          16, 16,
-                          drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
-                          draw_region, draw_region, 0
-    );
+
 
     /*
         [TODO]
@@ -115,14 +111,28 @@ void ghost_draw(Ghost *ghost) {
             ...
         */
     } else {
-        /*
-        switch (ghost->objData.facing)
-        {
-        case LEFT:
-            ...
+        switch (ghost->objData.facing) {
+            case RIGHT:
+                bitmap_x_offset = 0 + 16 * ((ghost->objData.moveCD/2) % 2);
+                break;
+            case LEFT:
+                bitmap_x_offset = 32 + 16 * ((ghost->objData.moveCD/2) % 2);
+                break;
+            case UP:
+                bitmap_x_offset = 64 + 16 * ((ghost->objData.moveCD/2) % 2);
+                break;
+            case DOWN:
+                bitmap_x_offset = 96 + 16 * ((ghost->objData.moveCD/2) % 2);
+                break;
+            default:
+                break;
         }
-        */
     }
+    al_draw_scaled_bitmap(ghost->move_sprite, bitmap_x_offset, 0,
+                           16, 16,
+                           drawArea.x + fix_draw_pixel_offset_x, drawArea.y + fix_draw_pixel_offset_y,
+                           draw_region, draw_region, 0
+    );
 
 }
 
