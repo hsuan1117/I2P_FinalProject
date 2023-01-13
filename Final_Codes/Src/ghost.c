@@ -54,13 +54,13 @@ Ghost *ghost_create(int flag) {
             ghost->move_script = &ghost_red_move_script;
             break;
         case Pinky:
-            ghost->objData.Coord.x = cage_grid_x;
+            ghost->objData.Coord.x = cage_grid_x-1;
             ghost->objData.Coord.y = cage_grid_y;
             ghost->move_sprite = load_bitmap("Assets/ghost_move_pink.png");
             ghost->move_script = &ghost_red_move_script;
             break;
         case Inky:
-            ghost->objData.Coord.x = cage_grid_x;
+            ghost->objData.Coord.x = cage_grid_x+1;
             ghost->objData.Coord.y = cage_grid_y;
             ghost->move_sprite = load_bitmap("Assets/ghost_move_orange.png");
             ghost->move_script = &ghost_red_move_script;
@@ -98,17 +98,34 @@ void ghost_draw(Ghost *ghost) {
     int bitmap_x_offset = 0;
     // [TODO] below is for animation usage, change the sprite you want to use.
     if (ghost->status == FLEE) {
-        al_draw_scaled_bitmap(ghost->flee_sprite, 0, 0, 30, 30,
+        bitmap_x_offset = (((GAME_TICK >> 4) % 2)  << 4);
+
+        //if expiring
+        // bitmap_x_offset = ((GAME_TICK) >> 4) << 4;
+
+        al_draw_scaled_bitmap(ghost->flee_sprite, bitmap_x_offset, 0, 16, 16,
                               drawArea.x + fix_draw_pixel_offset_x,
                               drawArea.y + fix_draw_pixel_offset_y,
                               drawArea.w, drawArea.h, 0);
     } else if (ghost->status == GO_IN) {
-        /*
-        switch (ghost->objData.facing)
-        {
-        case LEFT:
-            ...
-        */
+        switch (ghost->objData.facing) {
+            case RIGHT:
+                bitmap_x_offset = 0;
+                break;
+            case LEFT:
+                bitmap_x_offset = 16;
+                break;
+            case UP:
+                bitmap_x_offset = 32;
+                break;
+            case DOWN:
+                bitmap_x_offset = 48;
+                break;
+        }
+        al_draw_scaled_bitmap(ghost->dead_sprite, bitmap_x_offset, 0, 16, 16,
+                              drawArea.x + fix_draw_pixel_offset_x,
+                              drawArea.y + fix_draw_pixel_offset_y,
+                              drawArea.w, drawArea.h, 0);
     } else {
         switch (ghost->objData.facing) {
             case RIGHT:

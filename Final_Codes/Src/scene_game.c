@@ -156,7 +156,7 @@ static void status_update(void) {
             RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
             if (ghosts[i]->status == FLEE) {
                 // game_log("ghost %d is eaten\n", i);
-                ghosts[i]->status = GO_IN;
+                ghost_collided(ghosts[i]);
                 game_main_Score += 100;
             } else {
                 game_over = true;
