@@ -146,8 +146,8 @@ static void status_update(void) {
             RecAreaOverlap(getDrawArea(pman->objData, GAME_TICK_CD), getDrawArea(ghosts[i]->objData, GAME_TICK_CD))) {
             game_log("collide with ghost\n");
             al_rest(1.0);
-            pacman_die();
             game_over = true;
+            pacman_die();
             break;
         }
     }
