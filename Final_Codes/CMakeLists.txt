@@ -8,6 +8,7 @@ find_package(PkgConfig)
 pkg_check_modules(ALLEGRO5 REQUIRED allegro-5 allegro_main-5 allegro_font-5 allegro_dialog-5 allegro_primitives-5 allegro_image-5 allegro_ttf-5 allegro_audio-5 allegro_acodec-5)
 
 include_directories(Src)
+include_directories(Lib)
 
 file(COPY Assets/Music DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY Assets/ProgressBar DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -35,7 +36,7 @@ add_executable(Allegro5Template
         Src/shared.c
         Src/shared.h
         Src/utility.c
-        Src/utility.h Src/scene_end.c Src/scene_win.h Src/scene_win.c Src/scene_restart.h Src/scene_restart.c Src/scene_game_over.h Src/scene_game_over.c Src/TextInput.c Src/TextInput.h)
+        Src/utility.h Src/scene_end.c Src/scene_win.h Src/scene_win.c Src/scene_restart.h Src/scene_restart.c Src/scene_game_over.h Src/scene_game_over.c Lib/components/TextInput.c Lib/components/TextInput.h Lib/components/common.c Lib/components/common.h Lib/components/TextButton.c)
 
 target_include_directories(Allegro5Template PUBLIC ${ALLEGRO5_INCLUDE_DIRS})
 target_compile_options(Allegro5Template PUBLIC ${ALLEGRO5_CFLAGS_OTHER})

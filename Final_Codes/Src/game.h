@@ -20,6 +20,8 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+#include "../Lib/components/TextInput.h"
+#include "components/common.h"
 
 typedef struct Ghost Ghost;
 typedef struct Map Map;
@@ -41,20 +43,7 @@ typedef void(*func_ptr_mouse)(int btn, int x, int y, int dz);
 // TODO: More function pointer typedefs for other events.
 
 // Structure containing all scene functions / event callbacks.
-typedef struct {
-    char *name;
-    func_ptr initialize;
-    func_ptr update;
-    func_ptr draw;
-    func_ptr destroy;
-    func_ptr_keyboard on_key_down;
-    func_ptr_keyboard on_key_up;
-    func_ptr_mouse on_mouse_down;
-    func_ptr_mouse on_mouse_move;
-    func_ptr_mouse on_mouse_up;
-    func_ptr_mouse on_mouse_scroll;
-    // TODO: More event callbacks such as timer tick, video finished, ...
-} Scene;
+typedef AllegroScene Scene;
 
 // Frame rate (frame per second)
 extern const int FPS;

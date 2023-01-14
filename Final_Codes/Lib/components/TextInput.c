@@ -21,6 +21,8 @@ TextInput ruru_create_textInput(float x, float y, float w, float h, char *value)
     textInput.value = value;
     textInput.isFocus = false;
 
+    textInput.event_register = &ruru_register_text_input;
+
     return textInput;
 }
 
@@ -32,9 +34,11 @@ TextInput ruru_create_textInput(float x, float y, float w, float h, char *value)
 void ruru_draw_text_input(TextInput textInput) {
     al_draw_filled_rectangle(textInput.body.x, textInput.body.y, textInput.body.x + textInput.body.w,
                              textInput.body.y + textInput.body.h, al_map_rgb(255, 255, 255));
-    if(textInput.isFocus){
+    if (textInput.isFocus) {
         al_draw_rectangle(textInput.body.x, textInput.body.y, textInput.body.x + textInput.body.w,
-                          textInput.body.y + textInput.body.h, al_map_rgb(255, 0, 0), 2);
+                          textInput.body.y + textInput.body.h, al_map_rgb(69, 86, 245), 3);
+        al_draw_rounded_rectangle(textInput.body.x - 4, textInput.body.y - 4, textInput.body.x + textInput.body.w + 4,
+                                  textInput.body.y + textInput.body.h + 4, 2, 2, al_map_rgb(255, 255, 255), 2);
     }
     al_draw_text(jfFont, al_map_rgb(0, 0, 0), textInput.body.x + 10, textInput.body.y + 10, 0, textInput.value);
 }
@@ -45,24 +49,38 @@ void ruru_draw_text_input(TextInput textInput) {
  * @param key 按鍵輸入值
  * @example 用於 on_key_down() 中
  * */
-void ruru_register_text_input_key(TextInput *textInput, int key) {
+static void ruru_register_text_input_key(TextInput *textInput, int key) {
     if (!textInput->isFocus) {
         return;
     }
     if (key == ALLEGRO_KEY_BACKSPACE) {
         if (strlen(textInput->value) > 0) {
-            textInput->value[strlen(textInput->value) - 1] = '\0';
+            char *temp = malloc(sizeof(char) * (strlen(textInput->value) + 2));
+            strncpy(temp, textInput->value, strlen(textInput->value) - 1);
+            temp[strlen(textInput->value) - 1] = '\0';
+            textInput->value = temp;
         }
-    } else if (key == ALLEGRO_KEY_ENTER) {
-
-    } else {
-        char *temp = malloc(sizeof(char) * (strlen(textInput->value) + 2));
-        strcpy(temp, textInput->value);
-        temp[strlen(textInput->value)] = (char) (96 + key);
-        temp[strlen(textInput->value) + 1] = '\0';
-        textInput->value = temp;
     }
-    // printf("%s", textInput->value);
+}
+
+/**
+ * @name
+ * @param textInput 要註冊的文字輸入框
+ * @param character
+ * @example
+ * */
+static void ruru_register_text_input_key_char(TextInput *textInput, int character) {
+    if (!textInput->isFocus) {
+        return;
+    }
+    // backspace char
+    if (character == 127) return;
+
+    char *temp = malloc(sizeof(char) * (strlen(textInput->value) + 2));
+    strcpy(temp, textInput->value);
+    temp[strlen(textInput->value)] = (char) character;
+    temp[strlen(textInput->value) + 1] = '\0';
+    textInput->value = temp;
 }
 
 /**
@@ -71,11 +89,22 @@ void ruru_register_text_input_key(TextInput *textInput, int key) {
  * @param key 按鍵輸入值
  * @example 用於 on_key_down() 中
  * */
-void ruru_register_text_input_mouse(TextInput *textInput, int x, int y) {
+static void ruru_register_text_input_mouse(TextInput *textInput, int x, int y) {
     if (x >= textInput->body.x && x <= textInput->body.x + textInput->body.w &&
         y >= textInput->body.y && y <= textInput->body.y + textInput->body.h) {
         textInput->isFocus = true;
     } else {
         textInput->isFocus = false;
+    }
+}
+
+void ruru_register_text_input(TextInput *textInput, ALLEGRO_EVENT event) {
+    //printf("registered text input\n");
+    if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+        ruru_register_text_input_mouse(textInput, event.mouse.x, event.mouse.y);
+    } else if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
+        ruru_register_text_input_key_char(textInput, event.keyboard.unichar);
+    } else if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
+        ruru_register_text_input_key(textInput, event.keyboard.keycode);
     }
 }
