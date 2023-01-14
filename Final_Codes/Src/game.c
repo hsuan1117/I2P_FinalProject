@@ -16,6 +16,7 @@
 #include "game.h"
 #include "scene_game.h"
 #include "scene_menu.h"
+#include "../Lib/components/common.h"
 
 /* global variables*/
 const int FPS = 60;
@@ -70,6 +71,7 @@ void game_create() {
     game_log("Game begin");
     // Initialize shared variables.
     shared_init();
+    component_init();
     game_log("Game initialized");
     // First scene
     game_change_scene(scene_menu_create());

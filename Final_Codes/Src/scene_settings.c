@@ -120,7 +120,8 @@ Scene scene_settings_create(void) {
     effect = load_effect();
 
     input = ruru_create_textInput(20 + 250, 150, 300, 50, "test");
-    btn = textButton_create(20 + 250, 210, 300, 50, "test", al_map_rgb(0, 0, 255));
+    input.maxLength = 5;
+    btn = textButton_create(20 + 250, 230, 300, 50, "test", al_map_rgb(0, 0, 255));
     btn.onclick = &btn_click;
 
     int cnt = scene.component_size++;

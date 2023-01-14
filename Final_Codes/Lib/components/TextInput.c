@@ -20,6 +20,8 @@ TextInput ruru_create_textInput(float x, float y, float w, float h, char *value)
     textInput.body.h = h;
     textInput.value = value;
     textInput.isFocus = false;
+    textInput.maxLength = -1;
+    textInput.errorMessage = "";
 
     textInput.event_register = &ruru_register_text_input;
 
@@ -40,7 +42,12 @@ void ruru_draw_text_input(TextInput textInput) {
         al_draw_rounded_rectangle(textInput.body.x - 4, textInput.body.y - 4, textInput.body.x + textInput.body.w + 4,
                                   textInput.body.y + textInput.body.h + 4, 2, 2, al_map_rgb(255, 255, 255), 2);
     }
-    al_draw_text(jfFont, al_map_rgb(0, 0, 0), textInput.body.x + 10, textInput.body.y + 10, 0, textInput.value);
+    if (textInput.errorMessage) {
+        al_draw_text(smallFont, al_map_rgb(255, 0, 0), textInput.body.x, textInput.body.y + textInput.body.h + 10, 0,
+                     textInput.errorMessage);
+    }
+
+    al_draw_text(mainFont, al_map_rgb(0, 0, 0), textInput.body.x + 10, textInput.body.y + 10, 0, textInput.value);
 }
 
 /**
@@ -52,6 +59,9 @@ void ruru_draw_text_input(TextInput textInput) {
 static void ruru_register_text_input_key(TextInput *textInput, int key) {
     if (!textInput->isFocus) {
         return;
+    }
+    if (textInput->maxLength == -1 || strlen(textInput->value) <= textInput->maxLength) {
+        textInput->errorMessage = "";
     }
     if (key == ALLEGRO_KEY_BACKSPACE) {
         if (strlen(textInput->value) > 0) {
@@ -75,6 +85,12 @@ static void ruru_register_text_input_key_char(TextInput *textInput, int characte
     }
     // backspace char
     if (character == 127) return;
+    if (textInput->maxLength != -1 && strlen(textInput->value) >= textInput->maxLength) {
+        textInput->errorMessage = "超過最大長度";
+        return;
+    } else {
+        textInput->errorMessage = "";
+    }
 
     char *temp = malloc(sizeof(char) * (strlen(textInput->value) + 2));
     strcpy(temp, textInput->value);

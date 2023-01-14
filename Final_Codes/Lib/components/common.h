@@ -6,6 +6,7 @@
 #define ALLEGRO5TEMPLATE_COMMON_H
 
 #include <allegro5/events.h>
+#include <allegro5/allegro_font.h>
 
 typedef void* component;
 
@@ -38,6 +39,9 @@ typedef struct {
     int component_size;
 } AllegroScene;
 
-void register_scene_components(void *scene, ALLEGRO_EVENT event);
+extern ALLEGRO_FONT *mainFont;
+extern ALLEGRO_FONT *smallFont;
 
+void register_scene_components(void *scene, ALLEGRO_EVENT event);
+void component_init();
 #endif //ALLEGRO5TEMPLATE_COMMON_H

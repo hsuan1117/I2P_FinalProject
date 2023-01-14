@@ -40,6 +40,12 @@ typedef struct {
 register_scene_components(&active_scene, event);
 ```
 
+2. Add to `game_create` in `game.c`
+
+```c
+component_init();
+```
+
 3. Initialize the scene in `scene_*.c`
 
 ```c    

@@ -10,6 +10,8 @@ typedef struct TextInput {
     RecArea body;
     char *value;
     bool isFocus;
+    int maxLength;
+    char *errorMessage;
 
     func_ptr_register event_register;
 } TextInput;
