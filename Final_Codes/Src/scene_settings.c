@@ -92,6 +92,10 @@ static void on_key_down(int key) {
     }
 }
 
+static void btn_click() {
+    printf("hi, this button clicked \n");
+}
+
 // The only function that is shared across files.
 Scene scene_settings_create(void) {
     Scene scene;
@@ -117,6 +121,7 @@ Scene scene_settings_create(void) {
 
     input = ruru_create_textInput(20 + 250, 150, 300, 50, "test");
     btn = textButton_create(20 + 250, 210, 300, 50, "test", al_map_rgb(0, 0, 255));
+    btn.onclick = &btn_click;
 
     int cnt = scene.component_size++;
     scene.component_types[cnt] = RURU_TEXT_INPUT;

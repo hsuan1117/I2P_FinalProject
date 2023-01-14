@@ -15,6 +15,7 @@ typedef struct {
     int rounded;
     int thickness;
 
+    func_ptr onclick;
     func_ptr_register event_register;
 } TextButton;
 

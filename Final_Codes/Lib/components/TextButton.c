@@ -63,7 +63,7 @@ void textButtonHover(TextButton *button, int x, int y) {
 }
 
 void buttonClick(TextButton *button) {
-    //printf("clicked");
+    if(button->onclick) (*button->onclick)();
 }
 
 void ruru_register_text_button(TextButton *textButton, ALLEGRO_EVENT event) {
