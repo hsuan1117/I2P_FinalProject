@@ -20,7 +20,7 @@ typedef struct {
 
 TextButton textButton_create(float x, float y, float w, float h, const char* text, ALLEGRO_COLOR color);
 void drawTextButton(TextButton button);
-bool textButtonHover(TextButton* button, int mouse_x, int mouse_y);
+void textButtonHover(TextButton *button, int x, int y);
 void ruru_register_text_button(TextButton *textButton, ALLEGRO_EVENT event);
 
 #endif

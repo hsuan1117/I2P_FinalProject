@@ -14,7 +14,7 @@
  * hovered color (auto calculation)
  *
  */
-TextButton textButton_create(float x, float y, float w, float h, const char* text, ALLEGRO_COLOR color){
+TextButton textButton_create(float x, float y, float w, float h, const char *text, ALLEGRO_COLOR color) {
 
     TextButton button;
     memset(&button, 0, sizeof(TextButton));
@@ -44,20 +44,26 @@ TextButton textButton_create(float x, float y, float w, float h, const char* tex
 
 void drawTextButton(TextButton button) {
     double x = button.body.x, y = button.body.y, w = button.body.w, h = button.body.h;
-    double cx = (2 * x + w)/2;
-    double cy = (2 * y + h)/2;
+    double cx = (2 * x + w) / 2;
+    double cy = (2 * y + h) / 2;
 
-    ALLEGRO_COLOR color_now = button.hovered? button.hovered_color : button.color;
-    al_draw_text(button.font, color_now, cx, cy - al_get_font_ascent(button.font)/2, ALLEGRO_ALIGN_CENTRE, button.text);
+    ALLEGRO_COLOR color_now = button.hovered ? button.hovered_color : button.color;
+    al_draw_text(button.font, color_now, cx, cy - al_get_font_ascent(button.font) / 2, ALLEGRO_ALIGN_CENTRE,
+                 button.text);
     al_draw_rounded_rectangle(x, y, x + w, y + h, button.rounded, button.rounded, color_now, button.thickness);
 }
 
-bool textButtonHover(TextButton *button, int mouse_x, int mouse_y) {
-    return pnt_in_rect(mouse_x, mouse_y, (*button).body);
+void textButtonHover(TextButton *button, int x, int y) {
+    if (pnt_in_rect(x, y, (*button).body)) {
+        //printf("hovered");
+        button->hovered = true;
+    } else {
+        button->hovered = false;
+    }
 }
 
 void buttonClick(TextButton *button) {
-    printf("clicked");
+    //printf("clicked");
 }
 
 void ruru_register_text_button(TextButton *textButton, ALLEGRO_EVENT event) {
