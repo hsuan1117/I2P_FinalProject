@@ -9,6 +9,7 @@
 #include "../Lib/components/TextInput.h"
 #include "../Lib/components/TextButton.h"
 #include "../Lib/components/ProgressBar.h"
+#include "../Lib/components/Select.h"
 
 // Variables and functions with 'static' prefix at the top level of a
 // source file is only accessible in that file ("file scope", also
@@ -23,6 +24,7 @@ static ALLEGRO_BITMAP *effect_bar[11] = {NULL, NULL, NULL, NULL, NULL, NULL, NUL
 static TextInput input;
 static ProgressBar progressBar;
 static TextButton btn;
+static Selector aSelector;
 // TODO: More variables and functions that will only be accessed
 // inside this scene. They should all have the 'static' prefix.
 
@@ -66,6 +68,7 @@ static void draw(void) {
     ruru_draw_text_input(input);
     drawTextButton(btn);
     draw_progress_bar(progressBar);
+    drawSelector(&aSelector);
 }
 
 static void on_mouse_down(ALLEGRO_MOUSE_EVENT button, int x, int y) {
@@ -99,6 +102,7 @@ static void btn_click() {
     printf("hi, this button clicked \n");
 }
 
+static const char *options[3] = {"test1", "test2", "test3"};
 // The only function that is shared across files.
 Scene scene_settings_create(void) {
     Scene scene;
@@ -128,6 +132,8 @@ Scene scene_settings_create(void) {
     btn.onclick = &btn_click;
     progressBar = create_progress_bar(20 + 250, 290, 300, 5, 0.7, al_map_rgb(0, 0, 255));
 
+    aSelector = selector_create(20 + 250, 400, 300, 200, options, 3, 0, al_map_rgb(0, 0, 255));
+
     int cnt = scene.component_size++;
     scene.component_types[cnt] = RURU_TEXT_INPUT;
     scene.components[cnt] = &input;
@@ -137,6 +143,9 @@ Scene scene_settings_create(void) {
     cnt = scene.component_size++;
     scene.component_types[cnt] = RURU_PROGRESS_BAR;
     scene.components[cnt] = &progressBar;
+    cnt = scene.component_size++;
+    scene.component_types[cnt] = SELECTOR;
+    scene.components[cnt] = &aSelector;
 
     game_log("Settings scene created");
     return scene;
