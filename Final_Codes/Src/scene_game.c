@@ -10,6 +10,7 @@
 #include "pacman_obj.h"
 #include "ghost.h"
 #include "map.h"
+#include "components/ProgressBar.h"
 
 
 // [HACKATHON 2-0]
@@ -29,6 +30,7 @@ static const int power_up_duration = 10;
 static Pacman *pman;
 static Map *basic_map;
 static Ghost **ghosts;
+static ProgressBar progressBar;
 bool debug_mode = false;
 bool cheat_mode = false;
 
@@ -222,7 +224,8 @@ static void draw(void) {
                       10ll - al_get_timer_count(power_up_timer));
     }
     al_draw_textf(menuFont, al_map_rgb(130, 140, 255), 30, 750, ALLEGRO_ALIGN_LEFT, "Progress: %d/%d %.0f%%",
-                  game_all_beans, basic_map->beansCount, (float)game_all_beans/(float)basic_map->beansCount*100.0);
+                  game_all_beans, basic_map->beansCount,
+                  (float) game_all_beans / (float) basic_map->beansCount * 100.0);
 
     draw_map(basic_map);
 
@@ -237,7 +240,8 @@ static void draw(void) {
     if (debug_mode) {
         draw_hitboxes();
     }
-
+    progressBar.percent = (float) game_all_beans / (float) basic_map->beansCount;
+    draw_progress_bar(progressBar);
 }
 
 static void draw_hitboxes(void) {
@@ -357,6 +361,16 @@ Scene scene_main_create(void) {
     scene.destroy = &destroy;
     scene.on_key_down = &on_key_down;
     scene.on_mouse_down = &on_mouse_down;
+    scene.components = malloc(sizeof(ProgressBar) * 1);
+    scene.component_types = malloc(1);
+    scene.component_size = 0;
+
+    progressBar = create_progress_bar(350, 760, 200, 5, 0.0, al_map_rgb(130, 140, 255));
+
+    int cnt = scene.component_size++;
+    scene.component_types[cnt] = RURU_PROGRESS_BAR;
+    scene.components[cnt] = &progressBar;
+
     // TODO: Register more event callback functions such as keyboard, mouse, ...
     game_log("Start scene created");
     return scene;

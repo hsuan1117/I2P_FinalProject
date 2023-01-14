@@ -49,7 +49,7 @@ add_executable(Allegro5Template
         Lib/components/TextInput.c
         Lib/components/TextInput.h
         Lib/components/TextButton.c
-        Lib/components/TextButton.h Lib/components/ProgressBar.c Lib/components/ProgressBar.h)
+        Lib/components/TextButton.h Lib/components/ProgressBar.c Lib/components/ProgressBar.h Lib/http/client.c Lib/http/client.h)
 
 target_include_directories(Allegro5Template PUBLIC ${ALLEGRO5_INCLUDE_DIRS})
 target_compile_options(Allegro5Template PUBLIC ${ALLEGRO5_CFLAGS_OTHER})
