@@ -5,6 +5,7 @@
 #include "common.h"
 #include "TextInput.h"
 #include "TextButton.h"
+#include "ProgressBar.h"
 
 ALLEGRO_FONT *mainFont = NULL;
 ALLEGRO_FONT *smallFont = NULL;
@@ -20,6 +21,11 @@ void register_scene_components(void *scene, ALLEGRO_EVENT event) {
                     break;
                 case RURU_TEXT_BUTTON:
                     ((TextButton *) (active_scene->components[i]))->event_register(
+                            (component *) (active_scene->components[i]), event);
+                    break;
+
+                case RURU_PROGRESS_BAR:
+                    ((ProgressBar *) (active_scene->components[i]))->event_register(
                             (component *) (active_scene->components[i]), event);
                     break;
 

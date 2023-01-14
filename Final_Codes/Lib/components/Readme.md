@@ -34,6 +34,8 @@ typedef struct {
 } Scene;
 ```
 
+2. Import `jf.ttf` into `Assets` folder
+
 2. Add to `game_start_event_loop` in `game.c`
 
 ```c
@@ -58,6 +60,18 @@ int cnt = scene.component_size++;
 scene.component_types[cnt] = RURU_TEXT_INPUT;
 scene.components[cnt] = &input;
 ```
+
+## Components
+* TextInput
+* TextButton
+* ProgressBar
+
+## Contribute
+To add component, following these steps:
+1. Add component type in `component.h`
+2. Add component in `component.c`
+3. Add a new enum of ComponentType in `common.h`
+4. Add logic dereference in `register_scene_components` in `component.c`
 
 ## Contributors
 

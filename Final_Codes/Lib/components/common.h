@@ -16,10 +16,13 @@ typedef void(*func_ptr_keyboard)(int keycode);
 
 typedef void(*func_ptr_mouse)(int btn, int x, int y, int dz);
 
+typedef void(*func_ptr_register)(component *component, ALLEGRO_EVENT event);
+
 typedef enum {
     RURU_TEXT_INPUT,
     RURU_TEXT_BUTTON,
-} InputType;
+    RURU_PROGRESS_BAR
+} ComponentType;
 
 typedef struct {
     char *name;
@@ -35,7 +38,7 @@ typedef struct {
     func_ptr_mouse on_mouse_scroll;
 
     component *components;
-    InputType *component_types;
+    ComponentType *component_types;
     int component_size;
 } AllegroScene;
 
