@@ -63,7 +63,7 @@ void textButtonHover(TextButton *button, int x, int y) {
 }
 
 void buttonClick(TextButton *button) {
-    if(button->onclick) (*button->onclick)();
+    if(button->onclick && button->hovered) (*button->onclick)();
 }
 
 void ruru_register_text_button(TextButton *textButton, ALLEGRO_EVENT event) {
